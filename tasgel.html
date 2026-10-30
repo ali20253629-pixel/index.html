@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>استمارة التسجيل - هيئة استثمار البصرة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{--navy:#14284b;--navy2:#1f3864;--gold:#c9a227;--paper:#f6f4ee;--ink:#1c2230;--line:#d6d2c4;--err:#b3261e;--ok:#1e7a46}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Cairo',Tahoma,Arial,sans-serif;background:var(--paper);color:var(--ink);line-height:1.7}
+header{background:var(--navy);color:#fff;border-bottom:5px solid var(--gold)}
+.hd{max-width:760px;margin:auto;padding:22px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.hd h1{margin:0;font-size:1.35rem;font-weight:800}
+.hd small{display:block;color:#d9c26a;font-weight:600;font-size:.95rem}
+.adm{background:transparent;border:1px solid #ffffff55;color:#fff;border-radius:8px;padding:6px 14px;font:inherit;font-size:.85rem;cursor:pointer}
+.adm:hover{background:#ffffff1a}
+main{max-width:760px;margin:26px auto 60px;padding:0 16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:26px 24px}
+.card h2{margin:0 0 4px;font-size:1.5rem;font-weight:800;color:var(--navy)}
+.card p.sub{margin:0 0 22px;color:#5b6270;font-size:.95rem}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 18px}
+.full{grid-column:1/-1}
+label{display:block;font-weight:700;font-size:.95rem;margin-bottom:4px;color:var(--navy)}
+label i{color:var(--err);font-style:normal}
+input,textarea{width:100%;font:inherit;padding:10px 12px;border:1.5px solid var(--line);border-radius:7px;background:#fffdf6;color:var(--ink)}
+input:focus,textarea:focus,button:focus-visible{outline:3px solid #c9a22755;border-color:var(--gold)}
+textarea{min-height:110px;resize:vertical}
+.hint{font-size:.8rem;color:#6b7280}
+.bad{border-color:var(--err)!important}
+.msg{color:var(--err);font-size:.82rem;min-height:1.1em}
+.btn{background:var(--navy2);color:#fff;border:0;border-radius:8px;padding:12px 28px;font:inherit;font-weight:700;font-size:1.05rem;cursor:pointer}
+.btn:hover{background:var(--navy)}
+.btn.alt{background:#fff;color:var(--navy2);border:1.5px solid var(--navy2)}
+.btn.sm{padding:7px 14px;font-size:.88rem}
+.btn.red{background:var(--err)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.done{text-align:center;padding:14px 4px}
+.done .no{display:inline-block;margin:10px 0;border:2px dashed var(--gold);border-radius:8px;padding:6px 26px;font-size:1.6rem;font-weight:800;color:var(--navy)}
+.done h2{color:var(--ok)}
+.hide{display:none!important}
+.tw{overflow-x:auto;margin-top:14px;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:.88rem;background:#fff}
+th{background:var(--navy);color:#fff;padding:9px 10px;text-align:right;white-space:nowrap}
+td{padding:8px 10px;border-top:1px solid var(--line);vertical-align:top;min-width:90px}
+td.long{min-width:220px;max-width:300px}
+tr:nth-child(even) td{background:#faf8f1}
+footer{text-align:center;color:#7a7f8a;font-size:.8rem;padding-bottom:30px}
+@media(max-width:600px){.grid{grid-template-columns:1fr}.card{padding:20px 16px}.hd h1{font-size:1.1rem}}
+@media print{header,.noprint,footer{display:none!important}body{background:#fff}.card{border:0}}
+</style>
+</head>
+<body>
+<header><div class="hd">
+  <h1>هيئة استثمار البصرة<small>قسم الموارد البشرية</small></h1>
+  <button class="adm noprint" id="goAdmin">دخول الإدارة</button>
+</div></header>
+
+<main>
+<!-- نموذج التسجيل -->
+<section id="viewForm" class="card">
+  <h2>استمارة التسجيل</h2>
+  <p class="sub">املأ البيانات التالية، والحقول المعلّمة بنجمة مطلوبة.</p>
+  <form id="f" novalidate>
+    <div class="grid">
+      <div class="full"><label for="name">الاسم الثلاثي <i>*</i></label><input id="name" autocomplete="name" placeholder="مثال: أحمد علي حسن"><div class="msg"></div></div>
+      <div><label for="phone">رقم الهاتف <i>*</i></label><input id="phone" inputmode="tel" dir="ltr" style="text-align:right" placeholder="07701234567"><div class="msg"></div></div>
+      <div><label for="dob">المواليد <i>*</i></label><input id="dob" type="date" min="1940-01-01" max="2012-12-31"><div class="msg"></div></div>
+      <div class="full"><label for="addr">السكن <i>*</i></label><input id="addr" placeholder="المحافظة - القضاء - المنطقة"><div class="msg"></div></div>
+      <div class="full"><label for="spec">الاختصاص الدقيق <i>*</i></label><input id="spec" placeholder="مثال: هندسة مدنية - إدارة مشاريع"><div class="msg"></div></div>
+      <div class="full"><label for="exp">الخبرات السابقة</label><textarea id="exp" placeholder="اذكر أماكن العمل ومدتها، وإن لم تكن لديك خبرة اكتب: لا توجد"></textarea></div>
+      <div class="full"><label for="bio">نبذة عن نفسك</label><textarea id="bio" maxlength="600" placeholder="عرّف بنفسك في بضعة أسطر"></textarea><div class="hint"><span id="cnt">0</span> / 600</div></div>
+    </div>
+    <div class="msg" id="fErr" style="margin-top:10px"></div>
+    <div class="row" style="margin-top:12px"><button class="btn" id="btnSend" type="submit">إرسال الطلب</button></div>
+  </form>
+</section>
+
+<!-- تأكيد -->
+<section id="viewDone" class="card hide">
+  <div class="done">
+    <h2>تم تسجيل طلبك</h2>
+    <div>رقم الطلب</div><div class="no" id="serial"></div>
+    <p id="doneNote" style="color:#5b6270;margin:6px 0 18px"></p>
+    <div class="row" style="justify-content:center">
+      <button class="btn" id="btnWa">إرسال الطلب عبر واتساب</button>
+      <button class="btn alt" id="btnNew">تسجيل جديد</button>
+    </div>
+  </div>
+</section>
+
+<!-- الإدارة -->
+<section id="viewLogin" class="card hide">
+  <h2>دخول الإدارة</h2><p class="sub">سجّل الدخول بحساب الإدارة لعرض الطلبات.</p>
+  <div class="grid">
+    <div><label for="em">البريد الإلكتروني</label><input id="em" type="email" dir="ltr" style="text-align:right" autocomplete="username"></div>
+    <div><label for="pw">كلمة المرور</label><input id="pw" type="password" dir="ltr" style="text-align:right" autocomplete="current-password"></div>
+  </div>
+  <div class="msg" id="pwMsg" style="margin-top:6px"></div>
+  <div class="row" style="margin-top:12px"><button class="btn" id="btnLogin">دخول</button><button class="btn alt" id="btnBack1">رجوع للاستمارة</button></div>
+</section>
+
+<section id="viewAdmin" class="card hide">
+  <h2>الطلبات المسجلة <span id="total" style="font-size:1rem;color:#6b7280"></span></h2>
+  <div class="row noprint" style="margin:10px 0">
+    <input id="q" placeholder="بحث بالاسم أو الهاتف أو الاختصاص أو رقم الطلب" style="max-width:300px">
+    <button class="btn sm" id="btnXlsx">تصدير إلى Excel</button>
+    <button class="btn sm alt" id="btnPrint">طباعة</button>
+    <button class="btn sm alt" id="btnBack2">رجوع للاستمارة</button>
+    <button class="btn sm alt" id="btnOut">تسجيل الخروج</button>
+  </div>
+  <div class="tw"><table><thead><tr>
+    <th>ت</th><th>تاريخ التقديم</th><th>الاسم الثلاثي</th><th>رقم الهاتف</th><th>السكن</th><th>المواليد</th><th>الاختصاص الدقيق</th><th>الخبرات السابقة</th><th>نبذة عن نفسك</th><th>رقم الطلب</th><th class="noprint"></th>
+  </tr></thead><tbody id="tb"></tbody></table></div>
+  <p id="empty" class="sub hide" style="margin-top:16px">لا توجد طلبات بعد.</p>
+</section>
+</main>
+<footer>هيئة استثمار البصرة - قسم الموارد البشرية</footer>
+
+<script type="module">
+/* ============ إعدادات Firebase (الصق إعداداتك هنا) ============ */
+const firebaseConfig = {
+  apiKey: "AIzaSyCl2OmuWn9dq7nTMfU7pYfQEeD0R-kzCqA",
+  authDomain: "index-6ee24.firebaseapp.com",
+  projectId: "index-6ee24",
+  storageBucket: "index-6ee24.firebasestorage.app",
+  messagingSenderId: "226504060595",
+  appId: "1:226504060595:web:95f36491acf1175e2b8ac6"
+};
+const WHATSAPP_NUMBER = ""; // اختياري: رقم واتساب بصيغة دولية بدون + (مثال 9647701234567) لإظهار زر الإرسال عبر واتساب
+/* ================================================================
+قواعد Firestore (الصقها في Firestore > Rules مع تغيير البريد):
+rules_version = '2';
+service cloud.firestore { match /databases/{db}/documents {
+  match /applicants/{id} {
+    allow create: if request.resource.data.keys().hasOnly(['name','phone','addr','dob','spec','exp','bio','code','createdAt'])
+      && request.resource.data.name is string && request.resource.data.name.size() <= 100
+      && request.resource.data.phone.matches('^07[0-9]{9}$')
+      && request.resource.data.exp.size() <= 1500 && request.resource.data.bio.size() <= 600
+      && request.resource.data.createdAt == request.time;
+    allow read, update, delete: if request.auth != null && request.auth.token.email == 'ADMIN_EMAIL_HERE';
+  } } }
+================================================================ */
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getFirestore,collection,addDoc,deleteDoc,doc,query,orderBy,onSnapshot,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const configured=!!firebaseConfig.projectId;
+let db,auth;
+if(configured){const app=initializeApp(firebaseConfig);db=getFirestore(app);auth=getAuth(app)}
+
+const $=id=>document.getElementById(id);
+const show=v=>{["viewForm","viewDone","viewLogin","viewAdmin"].forEach(x=>$(x).classList.toggle("hide",x!==v));scrollTo(0,0)};
+const digits=s=>s.replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d));
+const fmtDate=d=>d?d.replace(/-/g,"/"):"";
+const fmtTs=t=>{if(!t||!t.toDate)return"";const d=t.toDate(),p=n=>String(n).padStart(2,"0");return `${d.getFullYear()}/${p(d.getMonth()+1)}/${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`};
+const esc=s=>{const d=document.createElement("div");d.textContent=s??"";return d.innerHTML};
+const newCode=()=>{const c="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";let r="";const a=crypto.getRandomValues(new Uint8Array(6));a.forEach(n=>r+=c[n%c.length]);return "BSR-"+r};
+let last=null,rows=[],unsub=null;
+
+$("bio").addEventListener("input",()=>$("cnt").textContent=$("bio").value.length);
+function check(id,ok,text){const el=$(id);el.classList.toggle("bad",!ok);const m=el.parentElement.querySelector(".msg");if(m)m.textContent=ok?"":text;return ok}
+
+$("f").addEventListener("submit",async e=>{
+  e.preventDefault();$("fErr").textContent="";
+  const name=$("name").value.trim().replace(/\s+/g," ");
+  const phone=digits($("phone").value).replace(/[\s-]/g,"");
+  const v=[
+    check("name",name.split(" ").length>=3,"اكتب الاسم الثلاثي كاملاً (ثلاث كلمات على الأقل)"),
+    check("phone",/^07\d{9}$/.test(phone),"أدخل رقماً عراقياً صحيحاً من 11 رقماً يبدأ بـ 07"),
+    check("dob",!!$("dob").value,"اختر تاريخ الميلاد"),
+    check("addr",$("addr").value.trim().length>=3,"اكتب عنوان السكن"),
+    check("spec",$("spec").value.trim().length>=2,"اكتب الاختصاص الدقيق")
+  ];
+  if(v.includes(false)){const b=document.querySelector(".bad");b&&b.focus();return}
+  if(!configured){$("fErr").textContent="المنصة غير مربوطة بقاعدة البيانات بعد. أضف إعدادات Firebase في الملف.";return}
+  const rec={name,phone,addr:$("addr").value.trim(),dob:$("dob").value,spec:$("spec").value.trim(),
+    exp:$("exp").value.trim().slice(0,1500),bio:$("bio").value.trim().slice(0,600),code:newCode(),createdAt:serverTimestamp()};
+  const btn=$("btnSend");btn.disabled=true;btn.textContent="جارٍ الإرسال...";
+  try{
+    await addDoc(collection(db,"applicants"),rec);
+    last=rec;$("serial").textContent=rec.code;
+    $("btnWa").classList.toggle("hide",!WHATSAPP_NUMBER);
+    $("doneNote").textContent="تم استلام طلبك. احتفظ برقم الطلب للمراجعة.";
+    show("viewDone");
+  }catch(err){
+    $("fErr").textContent="تعذّر إرسال الطلب. تأكد من الاتصال بالإنترنت وأعد المحاولة.";
+  }finally{btn.disabled=false;btn.textContent="إرسال الطلب"}
+});
+$("btnWa").onclick=()=>{
+  const r=last;if(!r)return;
+  const t=`طلب تسجيل - هيئة استثمار البصرة\nرقم الطلب: ${r.code}\nالاسم: ${r.name}\nالهاتف: ${r.phone}\nالسكن: ${r.addr}\nالمواليد: ${fmtDate(r.dob)}\nالاختصاص الدقيق: ${r.spec}\nالخبرات السابقة: ${r.exp||"-"}\nنبذة: ${r.bio||"-"}`;
+  open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(t)}`,"_blank");
+};
+$("btnNew").onclick=()=>{$("f").reset();$("cnt").textContent=0;show("viewForm")};
+
+/* ---------- الإدارة ---------- */
+$("goAdmin").onclick=()=>{
+  if(!configured){alert("أضف إعدادات Firebase في الملف أولاً.");return}
+  if(auth.currentUser){startList();show("viewAdmin")}else{show("viewLogin");$("pwMsg").textContent=""}
+};
+$("btnLogin").onclick=async()=>{
+  $("pwMsg").textContent="";
+  try{await signInWithEmailAndPassword(auth,$("em").value.trim(),$("pw").value);$("pw").value="";startList();show("viewAdmin")}
+  catch(e){$("pwMsg").textContent="البريد أو كلمة المرور غير صحيحة"}
+};
+$("pw").addEventListener("keydown",e=>{if(e.key==="Enter")$("btnLogin").click()});
+$("btnBack1").onclick=$("btnBack2").onclick=()=>show("viewForm");
+$("btnOut").onclick=async()=>{if(unsub){unsub();unsub=null}await signOut(auth);rows=[];show("viewForm")};
+if(configured)onAuthStateChanged(auth,u=>{if(!u&&unsub){unsub();unsub=null}});
+
+function startList(){
+  if(unsub)return;
+  const q=query(collection(db,"applicants"),orderBy("createdAt","asc"));
+  unsub=onSnapshot(q,snap=>{rows=snap.docs.map(d=>({id:d.id,...d.data()}));render()},
+    err=>{$("empty").textContent="لا تملك صلاحية عرض الطلبات. تأكد أن بريدك هو بريد الإدارة في قواعد Firestore.";$("empty").classList.remove("hide")});
+}
+$("q").addEventListener("input",render);
+function render(){
+  const q=$("q").value.trim();
+  const list=rows.map((r,i)=>({...r,no:i+1})).filter(r=>!q||[r.name,r.phone,r.spec,r.addr,r.code].join(" ").includes(q));
+  $("total").textContent=`(${rows.length})`;
+  $("empty").textContent="لا توجد طلبات بعد.";
+  $("empty").classList.toggle("hide",list.length>0);
+  $("tb").innerHTML=list.map(r=>`<tr><td>${r.no}</td><td>${fmtTs(r.createdAt)}</td><td>${esc(r.name)}</td><td dir="ltr" style="text-align:right">${esc(r.phone)}</td><td>${esc(r.addr)}</td><td>${fmtDate(r.dob)}</td><td>${esc(r.spec)}</td><td class="long">${esc(r.exp)}</td><td class="long">${esc(r.bio)}</td><td>${esc(r.code)}</td><td class="noprint"><button class="btn sm alt" data-del="${r.id}">حذف</button></td></tr>`).join("");
+}
+$("tb").addEventListener("click",async e=>{
+  const id=e.target.dataset.del;if(!id)return;
+  if(confirm("حذف هذا الطلب نهائياً؟")){try{await deleteDoc(doc(db,"applicants",id))}catch(err){alert("تعذّر الحذف")}}
+});
+$("btnPrint").onclick=()=>print();
+$("btnXlsx").onclick=()=>{
+  if(!rows.length){alert("لا توجد بيانات للتصدير");return}
+  const head=["ت","تاريخ التقديم","الاسم الثلاثي","رقم الهاتف","السكن","المواليد","الاختصاص الدقيق","الخبرات السابقة","نبذة عن نفسك","رقم الطلب"];
+  const data=[head,...rows.map((r,i)=>[i+1,fmtTs(r.createdAt),r.name,r.phone,r.addr,fmtDate(r.dob),r.spec,r.exp,r.bio,r.code])];
+  const ws=XLSX.utils.aoa_to_sheet(data);
+  // عمود الهاتف نص حتى لا يُحذف الصفر
+  for(let i=1;i<data.length;i++){const c=ws["D"+(i+1)];if(c){c.t="s";c.z="@"}}
+  ws["!cols"]=[5,17,26,15,26,12,26,40,45,13].map(w=>({wch:w}));
+  ws["!autofilter"]={ref:`A1:J${data.length}`};
+  ws["!freeze"]={xSplit:0,ySplit:1};
+  ws["!views"]=[{RTL:true}];
+  const wb=XLSX.utils.book_new();wb.Workbook={Views:[{RTL:true}]};
+  XLSX.utils.book_append_sheet(wb,ws,"المتقدمون");
+  const d=new Date();
+  XLSX.writeFile(wb,`المتقدمون_هيئة_استثمار_البصرة_${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}.xlsx`);
+};
+</script>
+</body>
+</html>
